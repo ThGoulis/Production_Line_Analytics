@@ -4,6 +4,6 @@ __pycache__/
 .pytest_cache/
 .production_kpi.egg-info/
 
-PKG-INFO
+PGK-INFO
 *.md
 *.txt
