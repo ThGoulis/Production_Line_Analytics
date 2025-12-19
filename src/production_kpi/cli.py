@@ -141,12 +141,16 @@ def total_runtime(working_data):
     mask = sort_data[sort_data["status"].isin([0, 2])]
 
     # trace for every run the START and the STOP process 
-    tracing = (mask.groupby(["production_line_id", "season_tracking"])
-                .agg(
-                    start_timestamp=("timestamp", lambda x: x[mask.loc[x.index, "status"] == 0].min()),
-                    stop_timestamp =("timestamp", lambda x: x[mask.loc[x.index, "status"] == 2].max())
-                )
-                .reset_index()
+    mask["start_timestamp"] = mask["timestamp"].where(mask["status"] == 0)
+    mask["stop_timestamp"]  = mask["timestamp"].where(mask["status"] == 2) 
+
+    # Group data per id and season tracking and calculate first and last timestamp | as_index=False -> in purpose to fill all the lines
+    tracing = (
+        mask.groupby(["production_line_id", "season_tracking"], as_index=False)
+        .agg(
+            start_timestamp=("start_timestamp", "min"),
+            stop_timestamp=("stop_timestamp", "max"),
+        )
     )
 
     # check if runs was START without STOP
