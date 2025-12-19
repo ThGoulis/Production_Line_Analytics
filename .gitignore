@@ -2,8 +2,9 @@
 __pycache__/
 *.pyc
 .pytest_cache/
-.production_kpi.egg-info/
+src/production_kpi.egg-info/
+src/*.egg-info/
 
-PGK-INFO
+PKG-INFO
 *.md
 *.txt
