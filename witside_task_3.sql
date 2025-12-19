@@ -55,26 +55,6 @@ runs AS (
   FROM seq
   WHERE status_code IN (0,2)
   GROUP BY 1,2
-),
-
-dur AS (
-  SELECT
-    production_line_id,
-    date_diff('microsecond', start_ts, COALESCE(stop_ts, (SELECT max_ts FROM total_uptime))) AS dur_us
-  FROM runs
-),
-
-uptime AS (
-  SELECT production_line_id, SUM(dur_us) AS uptime_us
-  FROM dur
-  GROUP BY 1
-),
-
-downtime AS (
-  SELECT
-    production_line_id,
-    (date_diff('microsecond', (SELECT min_ts FROM total_uptime), (SELECT max_ts FROM total_uptime)) - uptime_us) AS downtime_us
-  FROM uptime
 )
 
 SELECT
