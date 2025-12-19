@@ -137,7 +137,7 @@ def total_runtime(working_data):
     # create collumn season_tracking as sequence counter of runs per production line ID
     sort_data["season_tracking"] = (sort_data["status"].eq(0).groupby(sort_data["production_line_id"]).cumsum())
 
-    # filter status how have values START and STOP
+    # # filtered data 
     mask = sort_data[sort_data["status"].isin([0, 2])]
 
     # trace for every run the START and the STOP process 
