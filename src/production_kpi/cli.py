@@ -20,7 +20,7 @@ def main():
 
         result = product_line_gr_np_47(working_data)
 
-        print("Report for product line gr-np-47:\n",result,"\n")
+        print("Report for product line gr-np-47:\n\n",result,"\n")
 
         result.to_csv("gr-np-47.csv", index=False)
 
@@ -87,14 +87,17 @@ def product_line_gr_np_47(working_data):
     # Keep only the start and the end of every production process
     gr_np_47_mask = sort_data_gr_np_47[sort_data_gr_np_47["status"].isin([0, 2])].copy()
 
-    # apply tracing for every production process
+    # filtered data 
+    gr_np_47_mask["start_timestamp"] = gr_np_47_mask["timestamp"].where(gr_np_47_mask["status"] == 0)
+    gr_np_47_mask["stop_timestamp"]  = gr_np_47_mask["timestamp"].where(gr_np_47_mask["status"] == 2) 
+
+    # Group data per id and season tracking and calculate first and last timestamp | as_index=False -> in purpose to fill all the lines
     tracing_gr_np_47 = (
-        gr_np_47_mask.groupby(["production_line_id", "season_tracking"])
+        gr_np_47_mask.groupby(["production_line_id", "season_tracking"], as_index=False)
         .agg(
-            start_timestamp=('timestamp', lambda x: x[gr_np_47_mask.loc[x.index, 'status'] == 0].min()),
-            stop_timestamp=('timestamp', lambda x: x[gr_np_47_mask.loc[x.index, 'status'] == 2].max())
+            start_timestamp=("start_timestamp", "min"),
+            stop_timestamp=("stop_timestamp", "max"),
         )
-        .reset_index()
     )
 
     # calculate the duration of every production process
