@@ -54,10 +54,3 @@ runs AS (
 )
 SELECT *
 FROM runs;
-
--- dur AS (
---   SELECT
---     production_line_id,
---     date_diff('second', start_ts, coalesce(stop_ts, (SELECT max_ts FROM total_time))) AS dur_us
---   FROM runs
--- )
