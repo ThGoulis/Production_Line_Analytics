@@ -150,14 +150,14 @@ def total_runtime(working_data):
     # create collumn season_tracking as sequence counter of runs per production line ID
     sort_data["season_tracking"] = (sort_data["status"].eq(0).groupby(sort_data["production_line_id"]).cumsum())
 
-    # # filtered data 
+    # filtered data 
     mask = sort_data[sort_data["status"].isin([0, 2])]
 
     # trace for every run the START and the STOP process 
     mask["start_timestamp"] = mask["timestamp"].where(mask["status"] == 0)
     mask["stop_timestamp"]  = mask["timestamp"].where(mask["status"] == 2) 
 
-    # Group data per id and season tracking and calculate first and last timestamp | as_index=False -> in purpose to fill all the lines
+    # group data per id and season tracking and calculate first and last timestamp | as_index=False -> in purpose to fill all the lines
     tracing = (
         mask.groupby(["production_line_id", "season_tracking"], as_index=False)
         .agg(
