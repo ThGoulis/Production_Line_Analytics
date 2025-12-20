@@ -8,3 +8,5 @@ src/*.egg-info/
 PKG-INFO
 *.md
 *.txt
+*.docx
+*.pdf
