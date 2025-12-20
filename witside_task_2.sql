@@ -41,7 +41,7 @@ seq AS (
     ) AS run_id
   FROM base
 ),
--- Aggregates each run how start and stop timestamps by taking the first START(0) and last STOP(2) per production line and run_id.
+-- aggregate each run how start and stop timestamps by taking the first START(0) and last STOP(2) per production line and run_id.
 runs AS (
   SELECT
     production_line_id,
