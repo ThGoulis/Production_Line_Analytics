@@ -57,6 +57,6 @@ runs AS (
   GROUP BY 1,2
 )
 
-SELECT*
+SELECT *
 FROM runs
 ORDER BY production_line_id, start_ts;
