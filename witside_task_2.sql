@@ -12,11 +12,11 @@ raw AS (
   FROM read_csv_auto('./dataset.csv', header=true)
     ORDER BY production_line_id, "timestamp"
 ),
-
+-- set min and max timestamp
 total_time AS (
   SELECT min(ts) AS min_ts, max(ts) AS max_ts FROM raw
 ),
-
+-- merge the events and, if a line starts in ON, adds a START at the beginning (min_ts)
 base AS (
   SELECT production_line_id, status_code, ts FROM raw
   UNION ALL
@@ -28,7 +28,7 @@ base AS (
   )
   WHERE rn = 1 AND status_code = 1
 ),
-
+-- assign a run_id per production line by counting START events over time
 seq AS (
   SELECT
     production_line_id,
@@ -41,7 +41,7 @@ seq AS (
     ) AS run_id
   FROM base
 ),
-
+-- Aggregates each run how start and stop timestamps by taking the first START(0) and last STOP(2) per production line and run_id.
 runs AS (
   SELECT
     production_line_id,
