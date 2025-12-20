@@ -1,5 +1,6 @@
 import pandas as pd
 import argparse
+import sys
 
 def main():
     
@@ -49,7 +50,7 @@ def load_validate_transform_data():
     input_header = df.columns.tolist()
 
     # expected headers from file 
-    expected_headers =[
+    expected_headers = [
         "production_line_id",
         "status",
         "timestamp"
@@ -59,7 +60,19 @@ def load_validate_transform_data():
     if not (input_header == expected_headers):
         exit("Wrong headers in csv file.\nProcess terminate")
 
-    # create a copy of original
+    # expected status
+    expected_values = {"START", "ON", "STOP"}
+
+    # find if there is invalid values in collumn status and store it
+    invalid_values = df.loc[~df["status"].isin(expected_values), "status"].unique()
+
+    # validate the result from invalid values and exit the program if appears
+    if invalid_values:
+        exit(
+            f"Wrong values in status. Allowed: {expected_values}. \n"
+            f"Invalid: {invalid_values}. Process terminate"
+        )
+
     working_data = df
 
     # convert column timestamp to datetime
