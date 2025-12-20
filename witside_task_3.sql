@@ -57,9 +57,6 @@ runs AS (
   GROUP BY 1,2
 )
 
-SELECT
-  production_line_id AS worst_line_id,
-  downtime_us * INTERVAL '1 microsecond' AS worst_line_downtime
-FROM downtime
-ORDER BY downtime_us DESC
-LIMIT 1;
+SELECT*
+FROM runs
+ORDER BY production_line_id, start_ts;
