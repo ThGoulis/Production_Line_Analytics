@@ -72,6 +72,7 @@ def load_validate_transform_data():
             f"Invalid: {invalid_values}. Process terminate"
         )
 
+    # create a copy of main df
     working_data = df
 
     # convert column timestamp to datetime
